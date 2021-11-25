@@ -8,6 +8,7 @@ package proyectofinal;
 import java.awt.Color;
 import java.util.Random;
 import javax.swing.JOptionPane;
+import java.io.*;
         
 
 
@@ -21,8 +22,10 @@ public class Frame1 extends javax.swing.JFrame {
     int pregUsadas[] = new int[16];
     int contPreguntas=0;
     int error=0;
-    Preguntas millonario[] = new Preguntas[4];
+    Preguntas millonario[] = new Preguntas[15];
     boolean pregCreadas=false;
+    
+    
     
     
     private void contructor()
@@ -37,9 +40,55 @@ public class Frame1 extends javax.swing.JFrame {
 
     
     
+    public void guardarMillonarios(){
+        try{
+            FileWriter escritor = new FileWriter(new File("Preguntas.csv"));
+            PrintWriter impresor = new PrintWriter(escritor);
+            
+            for (int i=0;i<4;i++){
+                impresor.println(millonario[i].gettextoPreg()+","
+                        +millonario[i].getrespA()+","+millonario[i].getrespB()
+                        +","+millonario[i].getrespC()+","
+                        +millonario[i].getrespD()+","
+                        +millonario[i].getrespCorrecta());
+            }
+            impresor.close();
+            
+        } catch(Exception e){
+            System.out.println("Se presento un error al guardar: "+
+                    e.getMessage());
+        }
+    }
+    
+    public void leerMillonarios(){
+        String linea;
+        int posicion=0;
+        String atributos[];
+        
+        try{
+            DataInputStream entrada = new DataInputStream(new FileInputStream("Preguntas.csv"));
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(entrada));
+            
+            while ((linea = buffer.readLine()) != null){
+                atributos = linea.split(",");
+                millonario[posicion] = new Preguntas();
+                millonario[posicion].settextoPreg(atributos[0]);
+                millonario[posicion].setrespA(atributos[1]);
+                millonario[posicion].setrespB(atributos[2]);
+                millonario[posicion].setrespC(atributos[3]);
+                millonario[posicion].setrespD(atributos[4]);
+                millonario[posicion].setrespCorrecta(atributos[5]);
+                posicion++;
+            }
+            entrada.close();
+        } catch(Exception e){
+            System.out.println("Se presento un error al abrir: "+e.getMessage());
+        }
+    }
     
     public Frame1() {
         initComponents();
+        leerMillonarios();
     }
 
    
@@ -220,12 +269,15 @@ public class Frame1 extends javax.swing.JFrame {
                 + "concursante");
         jButton1.setText("Iniciar juego");
         
+       
+        
     }//GEN-LAST:event_formWindowActivated
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         
+        
         do {
-            numeroRandom = (int)(Math.random()*4+1);
+            numeroRandom = (int)(Math.random()*15+1);
             error=0;
             for (int i=0;i<pregUsadas.length;i++){
                 if (numeroRandom==pregUsadas[i]){
@@ -288,24 +340,17 @@ public class Frame1 extends javax.swing.JFrame {
         jTextField5.setBackground(Color.WHITE);
                 
         
+       
+        jTextField1.setText(millonario[pedirPregunta-1].gettextoPreg());
+        jTextField2.setText("A. "+millonario[pedirPregunta-1].getrespA());
+        jTextField3.setText("B. "+millonario[pedirPregunta-1].getrespB());
+        jTextField4.setText("C. "+millonario[pedirPregunta-1].getrespC());
+        jTextField5.setText("D. "+millonario[pedirPregunta-1].getrespD());
+        jButton1.setText("Siguiente pregunta");
+        jTextField6.setText("Dinero ganado:"+dinero);
+        jTextField7.setText("Numero de pregunta:"+pedirPregunta);
+        jTextField8.setText("Concursante: "+nombre);
         
-        
-        if(pregCreadas==true){
-            jTextField1.setText(millonario[pedirPregunta-1].gettextoPreg());
-            jTextField2.setText("A. "+millonario[pedirPregunta-1].getrespA());
-            jTextField3.setText("B. "+millonario[pedirPregunta-1].getrespB());
-            jTextField4.setText("C. "+millonario[pedirPregunta-1].getrespC());
-            jTextField5.setText("D. "+millonario[pedirPregunta-1].getrespD());
-            jButton1.setText("Siguiente pregunta");
-            jTextField6.setText("Dinero ganado:"+dinero);
-            jTextField7.setText("Numero de pregunta:"+pedirPregunta);
-            jTextField8.setText("Concursante: "+nombre);
-        }
-        if(pregCreadas==false){
-            JOptionPane.showMessageDialog(null,"Aun no existen preguntas, "
-                    + "por favor cree las preguntas antes de iniciar el "
-                    + "juego.");
-        }
         
      
         
@@ -437,7 +482,7 @@ public class Frame1 extends javax.swing.JFrame {
         
         
         for (int i=0;i<millonario.length;i++){
-                    millonario[i] = new Preguntas(i);
+                    millonario[i] = new Preguntas();
                     millonario[i].settextoPreg(JOptionPane.showInputDialog(""
                             + "Ingrese"
                             + " el texto de la pregunta "+(i+1)+":"));
@@ -461,7 +506,8 @@ public class Frame1 extends javax.swing.JFrame {
                 }
                 JOptionPane.showMessageDialog(null,"Preguntas guardadas"
                         + " exitosamente.");
-                pregCreadas=true;
+        
+                guardarMillonarios();
     }//GEN-LAST:event_jButton2MouseClicked
 
     /**

@@ -3,7 +3,6 @@ package proyectofinal;
 
 
 public class Preguntas {
-    private int numeroPreg;
     private String textoPreg;
     private String respA;
     private String respB;
@@ -11,8 +10,7 @@ public class Preguntas {
     private String respD;
     private String respCorrecta;
     
-    public Preguntas(int pnumeroPreg){
-        numeroPreg=pnumeroPreg;
+    public Preguntas(){
     }
     public void settextoPreg(String ptextoPreg){
         textoPreg=ptextoPreg;
@@ -34,9 +32,7 @@ public class Preguntas {
     }
     
     
-    public int getnumeroPreg(){
-        return numeroPreg;
-    }
+    
     public String gettextoPreg(){
         return textoPreg;
     }
@@ -55,4 +51,6 @@ public class Preguntas {
     public String getrespCorrecta(){
         return respCorrecta;
     }
+    
+ 
 }
