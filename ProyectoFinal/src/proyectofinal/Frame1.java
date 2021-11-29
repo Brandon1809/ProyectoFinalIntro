@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package proyectofinal;
-//Prueba
+//Mariana
 import java.awt.Color;
 import java.util.Random;
 import javax.swing.JOptionPane;
